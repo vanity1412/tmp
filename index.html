@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đáp án Nguyên lý Chi tiết máy</title>
+
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --paper: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --accent: #0f766e;
+      --warning: #b45309;
+      --border: #e5e7eb;
+      --soft: #eff6ff;
+      --soft-green: #ecfdf5;
+      --shadow: 0 18px 50px rgba(15, 23, 42, 0.10);
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 32%),
+        radial-gradient(circle at top right, rgba(15, 118, 110, 0.12), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 54px 0 28px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      padding: 42px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      right: -70px;
+      top: -70px;
+      background: rgba(37, 99, 235, 0.10);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--soft);
+      color: var(--primary-dark);
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 5vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -1.4px;
+      margin-bottom: 14px;
+      max-width: 850px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      max-width: 820px;
+      font-size: 17px;
+    }
+
+    .section {
+      margin: 28px 0;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+
+    .section-title {
+      padding: 22px 26px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(90deg, #f8fafc, #ffffff);
+    }
+
+    .section-title h2 {
+      font-size: 24px;
+      letter-spacing: -0.4px;
+    }
+
+    .section-body {
+      padding: 26px;
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .data-card {
+      border: 1px solid var(--border);
+      background: #fbfdff;
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+
+    .data-card strong {
+      color: var(--primary-dark);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #ffffff;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-size: 15px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    td:first-child {
+      font-weight: 800;
+      color: var(--primary-dark);
+      white-space: nowrap;
+      width: 92px;
+    }
+
+    .answer {
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .formula-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: #ffffff;
+    }
+
+    .formula-card h3 {
+      color: var(--primary-dark);
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .math {
+      font-family: "Cambria Math", "Times New Roman", serif;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin: 10px 0;
+      color: #111827;
+      overflow-x: auto;
+    }
+
+    .note {
+      border-left: 5px solid var(--warning);
+      background: #fffbeb;
+      color: #78350f;
+      padding: 16px 18px;
+      border-radius: 14px;
+      margin-top: 18px;
+    }
+
+    .force-box {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .force-card {
+      background: var(--soft-green);
+      border: 1px solid #bbf7d0;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .force-card h3 {
+      color: #065f46;
+      margin-bottom: 10px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1e40af;
+      font-weight: 700;
+      font-size: 13px;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px 0 46px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        padding: 28px;
+      }
+
+      .data-grid,
+      .formula-grid,
+      .force-box {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 14px;
+      }
+
+      th, td {
+        padding: 12px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .section, .hero {
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="hero">
+        <div class="badge">Nguyên lý Chi tiết máy</div>
+        <h1>Đáp án hệ thống dẫn động cơ khí</h1>
+        <p class="subtitle">
+          Trang này tổng hợp đáp án từ Câu 1 đến Câu 12 dựa trên đề bài hệ thống dẫn động:
+          động cơ, bộ truyền đai thang, bánh răng côn, bánh răng trụ răng nghiêng và băng tải.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div class="section-title">
+        <h2>Dữ kiện đề bài</h2>
+      </div>
+      <div class="section-body">
+        <div class="data-grid">
+          <div class="data-card">
+            <strong>Bộ truyền đai:</strong><br>
+            d<sub>1</sub> = 90 mm; d<sub>2</sub> = 180 mm; a = 600 mm
+          </div>
+          <div class="data-card">
+            <strong>Bánh răng côn:</strong><br>
+            Z<sub>1</sub> = 24; Z<sub>2</sub> = 48; m<sub>m</sub> = 3 mm
+          </div>
+          <div class="data-card">
+            <strong>Bánh răng trụ răng nghiêng:</strong><br>
+            Z<sub>3</sub> = 25; Z<sub>4</sub> = 50; m<sub>n</sub> = 2 mm; β = 12°
+          </div>
+          <div class="data-card">
+            <strong>Băng tải và hiệu suất:</strong><br>
+            D = 300 mm; F = 2000 N; V = 0.15 m/s; η<sub>đ</sub> = 0.95
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Bảng đáp án nhanh</h2>
+      </div>
+      <div class="section-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Câu</th>
+              <th>Đáp án</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Câu 1</td>
+              <td>Góc ôm bánh nhỏ: <span class="answer">α<sub>1</sub> ≈ 171.4°</span></td>
+            </tr>
+            <tr>
+              <td>Câu 2</td>
+              <td>Chiều dài dây đai: <span class="answer">L ≈ 1627.5 mm ≈ 1.63 m</span></td>
+            </tr>
+            <tr>
+              <td>Câu 3</td>
+              <td>Đường kính vòng chia bánh răng côn dẫn: <span class="answer">d<sub>1</sub> = 72 mm</span></td>
+            </tr>
+            <tr>
+              <td>Câu 4</td>
+              <td>Mômen xoắn trên trục III: <span class="answer">T<sub>III</sub> = 300 N.m</span></td>
+            </tr>
+            <tr>
+              <td>Câu 5</td>
+              <td>Mômen xoắn trên trục I: <span class="answer">T<sub>I</sub> = 75 N.m</span></td>
+            </tr>
+            <tr>
+              <td>Câu 6</td>
+              <td>Tỉ số truyền từ trục I đến trục III: <span class="answer">u<sub>I-III</sub> = 4</span></td>
+            </tr>
+            <tr>
+              <td>Câu 7</td>
+              <td>Tốc độ quay trục II: <span class="answer">n<sub>II</sub> ≈ 19.1 vòng/phút</span></td>
+            </tr>
+            <tr>
+              <td>Câu 8</td>
+              <td>
+                Tốc độ động cơ: <span class="answer">n<sub>đc</sub> ≈ 76.4 vòng/phút</span><br>
+                Công suất động cơ: <span class="answer">P<sub>đc</sub> ≈ 0.316 kW</span>
+              </td>
+            </tr>
+            <tr>
+              <td>Câu 9</td>
+              <td>Lực vòng trên bộ truyền bánh răng nghiêng: <span class="answer">F<sub>t</sub> ≈ 5869 N</span></td>
+            </tr>
+            <tr>
+              <td>Câu 10</td>
+              <td>Lực dọc trục trên bộ truyền bánh răng nghiêng: <span class="answer">F<sub>a</sub> ≈ 1248 N</span></td>
+            </tr>
+            <tr>
+              <td>Câu 11</td>
+              <td>
+                Bánh răng côn: <span class="answer">F<sub>t1</sub> hướng vào mặt giấy ⊗</span>,
+                <span class="answer">F<sub>t2</sub> hướng ra khỏi mặt giấy ⊙</span>.
+              </td>
+            </tr>
+            <tr>
+              <td>Câu 12</td>
+              <td>
+                Bánh răng nghiêng: <span class="answer">F<sub>a3</sub> hướng lên theo trục II</span>,
+                <span class="answer">F<sub>a4</sub> hướng xuống theo trục III</span>.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="note">
+          Ghi chú: Kết quả trên lấy theo giả thiết bỏ trượt đai; hiệu suất chỉ tính ở bộ truyền đai η<sub>đ</sub> = 0.95,
+          còn ổ trục, khớp nối và bộ truyền bánh răng lấy η = 1 theo đề.
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Công thức tính chính</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-grid">
+          <div class="formula-card">
+            <h3>1. Góc ôm bánh nhỏ</h3>
+            <div class="math">α<sub>1</sub> = 180° − 2arcsin((d<sub>2</sub> − d<sub>1</sub>) / 2a)</div>
+            <div class="math">α<sub>1</sub> = 180° − 2arcsin((180 − 90) / (2 × 600)) ≈ 171.4°</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>2. Chiều dài dây đai</h3>
+            <div class="math">L = 2a + π(d<sub>1</sub> + d<sub>2</sub>)/2 + (d<sub>2</sub> − d<sub>1</sub>)² / 4a</div>
+            <div class="math">L ≈ 1627.5 mm</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>3. Đường kính bánh răng côn dẫn</h3>
+            <div class="math">d<sub>1</sub> = m<sub>m</sub> × Z<sub>1</sub></div>
+            <div class="math">d<sub>1</sub> = 3 × 24 = 72 mm</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>4. Công suất băng tải</h3>
+            <div class="math">P = F × V</div>
+            <div class="math">P = 2000 × 0.15 = 300 W = 0.3 kW</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>5. Tốc độ trục III</h3>
+            <div class="math">n<sub>III</sub> = 60V / (πD)</div>
+            <div class="math">n<sub>III</sub> = 60 × 0.15 / (π × 0.3) ≈ 9.55 vòng/phút</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>6. Tỉ số truyền</h3>
+            <div class="math">u<sub>đ</sub> = 180 / 90 = 2</div>
+            <div class="math">u<sub>12</sub> = 48 / 24 = 2; u<sub>34</sub> = 50 / 25 = 2</div>
+            <div class="math">u<sub>I-III</sub> = u<sub>12</sub> × u<sub>34</sub> = 4</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>7. Mômen xoắn</h3>
+            <div class="math">T<sub>III</sub> = F × D/2 = 2000 × 0.3/2 = 300 N.m</div>
+            <div class="math">T<sub>I</sub> = T<sub>III</sub> / u<sub>I-III</sub> = 300 / 4 = 75 N.m</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>8. Tốc độ và công suất động cơ</h3>
+            <div class="math">n<sub>II</sub> = n<sub>III</sub> × u<sub>34</sub> ≈ 19.1 vòng/phút</div>
+            <div class="math">n<sub>đc</sub> = n<sub>III</sub> × 8 ≈ 76.4 vòng/phút</div>
+            <div class="math">P<sub>đc</sub> = 0.3 / 0.95 ≈ 0.316 kW</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>9. Lực vòng bánh răng nghiêng</h3>
+            <div class="math">d<sub>3</sub> = m<sub>n</sub>Z<sub>3</sub> / cosβ = 2 × 25 / cos12° ≈ 51.12 mm</div>
+            <div class="math">T<sub>II</sub> = T<sub>III</sub> / u<sub>34</sub> = 300 / 2 = 150 N.m</div>
+            <div class="math">F<sub>t</sub> = 2T<sub>II</sub> / d<sub>3</sub> ≈ 5869 N</div>
+          </div>
+
+          <div class="formula-card">
+            <h3>10. Lực dọc trục bánh răng nghiêng</h3>
+            <div class="math">F<sub>a</sub> = F<sub>t</sub> × tanβ</div>
+            <div class="math">F<sub>a</sub> = 5869 × tan12° ≈ 1248 N</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Chốt phần phương và chiều lực</h2>
+      </div>
+      <div class="section-body">
+        <div class="force-box">
+          <div class="force-card">
+            <h3>Câu 11: Lực vòng bánh răng côn</h3>
+            <p>
+              Theo chiều nâng vật trong hình, bánh Z<sub>1</sub> là bánh dẫn và Z<sub>2</sub> là bánh bị dẫn.
+              Hai lực vòng có cùng phương nhưng ngược chiều nhau.
+            </p>
+            <span class="pill">F<sub>t1</sub>: vào mặt giấy ⊗</span>
+            <span class="pill">F<sub>t2</sub>: ra khỏi mặt giấy ⊙</span>
+          </div>
+
+          <div class="force-card">
+            <h3>Câu 12: Lực dọc trục bánh răng nghiêng</h3>
+            <p>
+              Với bộ truyền bánh răng trụ răng nghiêng, lực dọc trục nằm song song với trục bánh răng.
+              Hai bánh Z<sub>3</sub> và Z<sub>4</sub> chịu lực dọc trục ngược chiều nhau.
+            </p>
+            <span class="pill">F<sub>a3</sub>: hướng lên theo trục II</span>
+            <span class="pill">F<sub>a4</sub>: hướng xuống theo trục III</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Trang đáp án tạo bằng HTML/CSS thuần, mã hóa UTF-8 để hiển thị tiếng Việt ổn định.
+  </footer>
+</body>
+</html>
