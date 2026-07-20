@@ -20,30 +20,6 @@
 
 ![Topology bài lab](images/topology.png)
 
-### 3.2. Sơ đồ logic
-
-```text
-                              AS 65000
-                    iBGP full-mesh qua loopback
-
-                              R1
-                       1.1.1.1/32
-                      /            \
-       192.168.1.0/30                192.168.3.0/30
-                    /                  \
-                  R2--------------------R3----------------ISP-R1
-             2.2.2.2/32          3.3.3.3/32          10.10.10.10/32
-                     192.168.2.0/30      192.168.12.0/30
-                  IS-IS Level 2                eBGP
-                     |             |             |
-                   PC-B          PC-C       PC-INTERNET
-
-                R1
-                 |
-               PC-A
-```
-
----
 
 ## 4. Kế hoạch địa chỉ IP
 
@@ -340,154 +316,36 @@ save
 
 # 10. Kiểm tra trạng thái interface
 
-Chạy trên từng router:
-
-```junos
-show interfaces terse | match "ge-0/0|lo0"
-```
-
-## Kết quả mong đợi
-
-- Các interface đã nối dây ở trạng thái `up up`.
-- Link chạy IS-IS phải có cả `family inet` và `family iso`.
-- Loopback phải ở trạng thái `up up`.
-
 ### Ảnh kết quả
 
 ![Kết quả interface](images/show-interfaces-terse.png)
-
----
 
 # 11. Kiểm tra IS-IS
 
 ## 11.1. Kiểm tra adjacency
 
-```junos
-show isis adjacency
-```
-
-### Kết quả mong đợi
-
-| Router | Neighbor cần thấy |
-|---|---|
-| R1 | R2, R3 |
-| R2 | R1, R3 |
-| R3 | R1, R2 |
-
-Tất cả adjacency phải ở trạng thái `Up`, Level 2.
-
-### Ảnh kết quả
-
 ![Kết quả IS-IS adjacency](images/show-isis-adjacency.png)
 
 ## 11.2. Kiểm tra IS-IS database
 
-```junos
-show isis database
-```
-
-Mỗi router cần thấy các LSP:
-
-```text
-R1.00-00
-R2.00-00
-R3.00-00
-```
-
-### Ảnh kết quả
-
 ![Kết quả IS-IS database](images/show-isis-database.png)
 
 ## 11.3. Kiểm tra route IS-IS
-
-```junos
-show route protocol isis
-```
-
-### Kết quả mong đợi
-
-- R1 học `2.2.2.2/32` và `3.3.3.3/32`.
-- R2 học `1.1.1.1/32` và `3.3.3.3/32`.
-- R3 học `1.1.1.1/32` và `2.2.2.2/32`.
-
-### Ảnh kết quả
-
 ![Kết quả route IS-IS](images/show-route-isis.png)
-
----
 
 # 12. Kiểm tra iBGP và eBGP
 
 ## 12.1. Kiểm tra BGP summary
-
-```junos
-show bgp summary
-```
-
-### Kết quả mong đợi
-
-#### R1
-
-- `2.2.2.2` – Established
-- `3.3.3.3` – Established
-
-#### R2
-
-- `1.1.1.1` – Established
-- `3.3.3.3` – Established
-
-#### R3
-
-- `1.1.1.1` – Established
-- `2.2.2.2` – Established
-- `192.168.12.2` – Established
-
-#### ISP-R1
-
-- `192.168.12.1` – Established
-
-### Ảnh kết quả
-
 ![Kết quả BGP summary](images/show-bgp-summary.png)
-
----
 
 # 13. Kiểm tra route BGP
 
 ## 13.1. Trên R1
 
-```junos
-show route protocol bgp
-```
-
-R1 dự kiến học:
-
-```text
-8.8.8.0/24
-10.10.20.0/24
-10.10.30.0/24
-```
-
-### Ảnh kết quả R1
-
 ![Route BGP trên R1](images/r1-show-route-bgp.png)
 
 ## 13.4. Trên ISP-R1
 
-ISP-R1 chỉ được học:
-
-```text
-10.10.10.0/24
-10.10.20.0/24
-```
-
-ISP-R1 không được học:
-
-```text
-10.10.30.0/24
-```
-
-### Ảnh kết quả ISP-R1
 
 ![Route BGP trên ISP-R1](images/isp-show-route-bgp.png)
 
@@ -495,145 +353,26 @@ ISP-R1 không được học:
 
 # 14. Kiểm tra policy export từ R3 ra ISP
 
-Chạy trên R3:
-
-```junos
-show route advertising-protocol bgp 192.168.12.2
-```
-
-## Kết quả mong đợi
-
-Chỉ có:
-
-```text
-10.10.10.0/24
-10.10.20.0/24
-```
-
-Không có:
-
-```text
-10.10.30.0/24
-8.8.8.0/24
-```
-
-### Ảnh kết quả
-
 ![Route R3 quảng bá sang ISP](images/r3-advertising-to-isp.png)
-
----
 
 # 15. Kiểm tra policy import từ ISP vào R3
 
 ## 15.1. Route ISP quảng bá
-
-Chạy trên ISP-R1:
-
-```junos
-show route advertising-protocol bgp 192.168.12.1
-```
-
-ISP-R1 dự kiến quảng bá:
-
-```text
-8.8.8.0/24
-10.10.10.10/32
-```
-
-### Ảnh kết quả
-
 ![Route ISP quảng bá sang R3](images/isp-advertising-to-r3.png)
 
 ## 15.2. Route được R3 chấp nhận
-
-Chạy trên R3:
-
-```junos
-show route 8.8.8.0/24 exact
-show route 10.10.10.10/32 exact
-```
-
-### Kết quả mong đợi
-
-- `8.8.8.0/24`: Có route BGP.
-- `10.10.10.10/32`: Không có exact route BGP do bị policy từ chối.
-
-### Ảnh kết quả
-
 ![Kết quả policy import trên R3](images/r3-import-policy-result.png)
 
----
-
 # 16. Kiểm tra next-hop self
-
-Chạy trên R1 hoặc R2:
-
-```junos
-show route 8.8.8.0/24 exact detail
-```
-
-## Kết quả mong đợi
-
-- Route được học qua iBGP từ R3.
-- BGP next hop là `3.3.3.3`.
-- `3.3.3.3` được resolve thông qua IS-IS.
-
-### Ảnh kết quả
-
 ![Kết quả next-hop self](images/show-next-hop-self.png)
 
----
-
 # 17. Kiểm tra ping
-
-## 17.1. PC-A truy cập Internet
-
-```text
-ping 8.8.8.8
-```
-
-Kết quả mong đợi: **Thành công**.
-
-![PC-A ping Internet](images/pc-a-ping-internet.png)
-
 ## 17.2. PC-B truy cập Internet
-
-```text
-ping 8.8.8.8
-```
-
-Kết quả mong đợi: **Thành công**.
 
 ![PC-B ping Internet](images/pc-b-ping-internet.png)
 
 ## 17.3. PC-C truy cập Internet
 
-```text
-ping 8.8.8.8
-```
-
-Kết quả mong đợi: **Thất bại**.
-
 Nguyên nhân: `10.10.30.0/24` không được R3 export sang ISP nên ISP không có route quay về LAN C.
 
 ![PC-C ping Internet thất bại](images/pc-c-ping-internet.png)
-
-## 17.4. PC-INTERNET truy cập LAN nội bộ
-
-```text
-ping 10.10.10.100
-ping 10.10.20.100
-ping 10.10.30.100
-```
-
-### Kết quả mong đợi
-
-| Đích | Kết quả |
-|---|---|
-| 10.10.10.100 | Thành công |
-| 10.10.20.100 | Thành công |
-| 10.10.30.100 | Thất bại |
-
-![PC Internet kiểm tra LAN nội bộ](images/pc-internet-ping-lans.png)
-
----
