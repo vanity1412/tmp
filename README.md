@@ -564,9 +564,3 @@ ping 8.8.8.8
 
 ![PC-C ping Internet thất bại](images/pc-c-ping-internet.png)
 
-
-- `ping 10.10.10.100`: kiểm tra ISP truy cập được LAN-A.
-- `ping 10.10.20.100`: kiểm tra ISP truy cập được LAN-B.
-- `ping 10.10.30.100`: kiểm tra ISP không truy cập được LAN-C theo policy.
-
-![PC Internet kiểm tra LAN nội bộ](images/pc-internet-ping-lans.png)
