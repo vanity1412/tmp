@@ -536,20 +536,6 @@ show route 3.3.3.3/32 exact
 
 # 17. Kiểm tra ping theo policy
 
-## 17.1. PC-A truy cập Internet
-
-| Thiết bị thao tác | Lệnh verify |
-|---|---|
-| PC-A | `ping 8.8.8.8` |
-
-```text
-ping 8.8.8.8
-```
-
-- `ping 8.8.8.8`: kiểm tra PC-A đi được tới mạng Internet giả lập hay chưa.
-
-![PC-A ping Internet](images/pc-a-ping-internet.png)
-
 ## 17.2. PC-B truy cập Internet
 
 | Thiết bị thao tác | Lệnh verify |
@@ -578,19 +564,6 @@ ping 8.8.8.8
 
 ![PC-C ping Internet thất bại](images/pc-c-ping-internet.png)
 
-## 17.4. PC-INTERNET truy cập LAN nội bộ
-
-| Thiết bị thao tác | Lệnh verify |
-|---|---|
-| PC-INTERNET | `ping 10.10.10.100` |
-| PC-INTERNET | `ping 10.10.20.100` |
-| PC-INTERNET | `ping 10.10.30.100` |
-
-```text
-ping 10.10.10.100
-ping 10.10.20.100
-ping 10.10.30.100
-```
 
 - `ping 10.10.10.100`: kiểm tra ISP truy cập được LAN-A.
 - `ping 10.10.20.100`: kiểm tra ISP truy cập được LAN-B.
