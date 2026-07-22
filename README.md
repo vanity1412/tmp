@@ -316,7 +316,16 @@ save
 
 # 10. Kiểm tra trạng thái interface
 
-Thực hiện trên R1, R2, R3 và ISP-R1:
+| Thiết bị thao tác | Lệnh show để kiểm tra                          |
+| ----------------- | ---------------------------------------------- |
+| R1                | `show interfaces terse \| match "ge-0/0\|lo0"` |
+| R1                | `show configuration interfaces \| display set` |
+| R2                | `show interfaces terse \| match "ge-0/0\|lo0"` |
+| R2                | `show configuration interfaces \| display set` |
+| R3                | `show interfaces terse \| match "ge-0/0\|lo0"` |
+| R3                | `show configuration interfaces \| display set` |
+| ISP-R1            | `show interfaces terse \| match "ge-0/0\|lo0"` |
+| ISP-R1            | `show configuration interfaces \| display set` |
 
 ```junos
 show interfaces terse | match "ge-0/0|lo0"
@@ -332,7 +341,20 @@ show configuration interfaces | display set
 
 # 11. IS-IS Level 2 chạy trên các link nội bộ
 
-Thực hiện trên R1, R2 và R3:
+| Thiết bị thao tác | Lệnh show để kiểm tra |
+|---|---|
+| R1 | `show isis interface` |
+| R1 | `show isis adjacency` |
+| R1 | `show isis database` |
+| R1 | `show route protocol isis` |
+| R2 | `show isis interface` |
+| R2 | `show isis adjacency` |
+| R2 | `show isis database` |
+| R2 | `show route protocol isis` |
+| R3 | `show isis interface` |
+| R3 | `show isis adjacency` |
+| R3 | `show isis database` |
+| R3 | `show route protocol isis` |
 
 ```junos
 show isis interface
@@ -356,7 +378,20 @@ show route protocol isis
 
 # 12. iBGP full-mesh và eBGP đã Established
 
-Thực hiện trên R1, R2, R3 và ISP-R1:
+| Thiết bị thao tác | Lệnh show để kiểm tra |
+|---|---|
+| R1 | `show bgp summary` |
+| R1 | `show bgp neighbor 2.2.2.2` |
+| R1 | `show bgp neighbor 3.3.3.3` |
+| R2 | `show bgp summary` |
+| R2 | `show bgp neighbor 1.1.1.1` |
+| R2 | `show bgp neighbor 3.3.3.3` |
+| R3 | `show bgp summary` |
+| R3 | `show bgp neighbor 1.1.1.1` |
+| R3 | `show bgp neighbor 2.2.2.2` |
+| R3 | `show bgp neighbor 192.168.12.2` |
+| ISP-R1 | `show bgp summary` |
+| ISP-R1 | `show bgp neighbor 192.168.12.1` |
 
 ```junos
 show bgp summary
@@ -374,6 +409,10 @@ show bgp neighbor <dia-chi-neighbor>
 
 ## 13.1. Trên R1
 
+| Thiết bị thao tác | Lệnh show để kiểm tra |
+|---|---|
+| R1 | `show route protocol bgp` |
+
 ```junos
 show route protocol bgp
 ```
@@ -383,6 +422,13 @@ show route protocol bgp
 ![Route BGP trên R1](images/r1-show-route-bgp.png)
 
 ## 13.2. Trên ISP-R1
+
+| Thiết bị thao tác | Lệnh show để kiểm tra |
+|---|---|
+| ISP-R1 | `show route protocol bgp` |
+| ISP-R1 | `show route 10.10.10.0/24 exact` |
+| ISP-R1 | `show route 10.10.20.0/24 exact` |
+| ISP-R1 | `show route 10.10.30.0/24 exact` |
 
 ```junos
 show route protocol bgp
@@ -396,11 +442,16 @@ show route 10.10.30.0/24 exact
 
 ![Route BGP trên ISP-R1](images/isp-show-route-bgp.png)
 
+![ISP-R1 kiểm tra route LAN theo policy](images/isp-route-lan-policy-result.png)
+
 ---
 
 # 14. Policy export từ R3 ra ISP
 
-Thực hiện trên R3:
+| Thiết bị thao tác | Lệnh show để kiểm tra |
+|---|---|
+| R3 | `show configuration policy-options policy-statement EXPORT-TO-ISP \| display set` |
+| R3 | `show route advertising-protocol bgp 192.168.12.2` |
 
 ```junos
 show configuration policy-options policy-statement EXPORT-TO-ISP | display set
@@ -418,7 +469,10 @@ show route advertising-protocol bgp 192.168.12.2
 
 ## 15.1. ISP-R1 quảng bá route sang R3
 
-Thực hiện trên ISP-R1:
+| Thiết bị thao tác | Lệnh show để kiểm tra |
+|---|---|
+| ISP-R1 | `show configuration policy-options policy-statement EXPORT-TO-AS65000 \| display set` |
+| ISP-R1 | `show route advertising-protocol bgp 192.168.12.1` |
 
 ```junos
 show configuration policy-options policy-statement EXPORT-TO-AS65000 | display set
@@ -432,7 +486,13 @@ show route advertising-protocol bgp 192.168.12.1
 
 ## 15.2. R3 chỉ nhận route hợp lệ từ ISP
 
-Thực hiện trên R3:
+| Thiết bị thao tác | Lệnh show để kiểm tra |
+|---|---|
+| R3 | `show configuration policy-options policy-statement IMPORT-FROM-ISP \| display set` |
+| R3 | `show route receive-protocol bgp 192.168.12.2` |
+| R3 | `show route receive-protocol bgp 192.168.12.2 hidden` |
+| R3 | `show route 8.8.8.0/24 exact` |
+| R3 | `show route 10.10.10.10/32 exact` |
 
 ```junos
 show configuration policy-options policy-statement IMPORT-FROM-ISP | display set
@@ -447,13 +507,20 @@ show route 10.10.10.10/32 exact
 - `show route receive-protocol bgp 192.168.12.2 hidden`: xem route bị ẩn hoặc bị policy chặn.
 - `show route ... exact`: kiểm tra đúng prefix cần xem trong bảng route.
 
+![Route R3 nhận từ ISP-R1](images/r3-receive-route-from-isp.png)
+
+![Route bị import policy chặn trên R3](images/r3-import-policy-hidden-result.png)
+
 ![Kết quả policy import trên R3](images/r3-import-policy-result.png)
 
 ---
 
 # 16. Next-hop self cho route Internet
 
-Thực hiện trên R1 hoặc R2:
+| Thiết bị thao tác | Lệnh show để kiểm tra |
+|---|---|
+| R1 hoặc R2 | `show route 8.8.8.0/24 exact detail` |
+| R1 hoặc R2 | `show route 3.3.3.3/32 exact` |
 
 ```junos
 show route 8.8.8.0/24 exact detail
@@ -469,7 +536,25 @@ show route 3.3.3.3/32 exact
 
 # 17. Kiểm tra ping theo policy
 
+## 17.1. PC-A truy cập Internet
+
+| Thiết bị thao tác | Lệnh verify |
+|---|---|
+| PC-A | `ping 8.8.8.8` |
+
+```text
+ping 8.8.8.8
+```
+
+- `ping 8.8.8.8`: kiểm tra PC-A đi được tới mạng Internet giả lập hay chưa.
+
+![PC-A ping Internet](images/pc-a-ping-internet.png)
+
 ## 17.2. PC-B truy cập Internet
+
+| Thiết bị thao tác | Lệnh verify |
+|---|---|
+| PC-B | `ping 8.8.8.8` |
 
 ```text
 ping 8.8.8.8
@@ -481,6 +566,10 @@ ping 8.8.8.8
 
 ## 17.3. PC-C truy cập Internet
 
+| Thiết bị thao tác | Lệnh verify |
+|---|---|
+| PC-C | `ping 8.8.8.8` |
+
 ```text
 ping 8.8.8.8
 ```
@@ -488,3 +577,23 @@ ping 8.8.8.8
 - `ping 8.8.8.8`: kiểm tra PC-C bị chặn đúng theo policy của bài lab.
 
 ![PC-C ping Internet thất bại](images/pc-c-ping-internet.png)
+
+## 17.4. PC-INTERNET truy cập LAN nội bộ
+
+| Thiết bị thao tác | Lệnh verify |
+|---|---|
+| PC-INTERNET | `ping 10.10.10.100` |
+| PC-INTERNET | `ping 10.10.20.100` |
+| PC-INTERNET | `ping 10.10.30.100` |
+
+```text
+ping 10.10.10.100
+ping 10.10.20.100
+ping 10.10.30.100
+```
+
+- `ping 10.10.10.100`: kiểm tra ISP truy cập được LAN-A.
+- `ping 10.10.20.100`: kiểm tra ISP truy cập được LAN-B.
+- `ping 10.10.30.100`: kiểm tra ISP không truy cập được LAN-C theo policy.
+
+![PC Internet kiểm tra LAN nội bộ](images/pc-internet-ping-lans.png)
