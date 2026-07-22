@@ -1,4 +1,11 @@
 # LAB JUNIPER – BGP (iBGP, eBGP) + IS-IS + POLICY IMPORT/EXPORT
+## 1
+
+Bài lab mô phỏng một AS nội bộ 65000 gồm R1, R2 và R3, kết nối ra ISP thuộc AS 65001. Trong mạng nội bộ, em sử dụng IS-IS Level 2 làm IGP để quảng bá các liên kết và địa chỉ loopback. Sau khi các loopback có khả năng kết nối, em thiết lập iBGP full-mesh giữa ba router bằng địa chỉ loopback.
+
+Mỗi router sử dụng export policy để chỉ quảng bá đúng mạng LAN trực tiếp của mình vào iBGP. R3 đóng vai trò router biên, thiết lập eBGP với ISP. R3 nhận mạng Internet 8.8.8.0/24 từ ISP, sau đó quảng bá vào iBGP và sử dụng next-hop self để R1, R2 gửi lưu lượng Internet qua R3.
+
+Ở chiều ngược lại, R3 quảng bá các mạng LAN của AS 65000 sang ISP để bảo đảm có return path. Các policy đều có term reject cuối cùng nhằm tránh quảng bá hoặc nhận các route ngoài yêu cầu. Khi kiểm tra, em thực hiện theo thứ tự interface, IS-IS adjacency, kết nối loopback, BGP summary, bảng route, policy và cuối cùng mới kiểm tra ping từ PC
 
 ## 2. Mục tiêu
 
@@ -13,7 +20,6 @@
 5. Kiểm tra các route được import và export đúng theo policy.
 
 ---
-
 ## 3. Topology
 
 ### 3.1. Ảnh topology
